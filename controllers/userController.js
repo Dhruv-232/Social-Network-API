@@ -57,6 +57,30 @@ module.exports = {
 
 },
 
+async updateUser(req, res) {
+  try {
+    const userData = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      {
+        $set: req.body,
+      },
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+
+    if (!userData) {
+      return res.status(404).json({ message: 'No user with that id!' });
+    }
+
+    res.json(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+},
+
   // Add an assignment to a student
   addAssignment(req, res) {
   console.log('You are adding an assignment');
