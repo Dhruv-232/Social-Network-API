@@ -81,24 +81,22 @@ async updateUser(req, res) {
   }
 },
 
-  // Add an assignment to a student
-  addAssignment(req, res) {
-  console.log('You are adding an assignment');
-  console.log(req.body);
-  Student.findOneAndUpdate(
-    { _id: req.params.studentId },
-    { $addToSet: { assignments: req.body } },
-    { runValidators: true, new: true }
-  )
-    .then((student) =>
-      !student
-        ? res
-          .status(404)
-          .json({ message: 'No student found with that ID :(' })
-        : res.json(student)
-    )
-    .catch((err) => res.status(500).json(err));
+// Create friend
+async createFriend(req, res) {
+  try {
+    const userData = await User.findOneAndUpdate({ _id: req.params.userId }, { $addToSet: { friends: req.params.friendId } }, { new: true });
+
+    if (!userData) {
+      return res.status(404).json({ message: 'No user with that id!' });
+    }
+
+    res.json(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 },
+
 // Remove assignment from a student
 removeAssignment(req, res) {
   Student.findOneAndUpdate(
