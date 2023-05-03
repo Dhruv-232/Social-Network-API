@@ -97,20 +97,19 @@ async createFriend(req, res) {
   }
 },
 
-// Remove assignment from a student
-removeAssignment(req, res) {
-  Student.findOneAndUpdate(
-    { _id: req.params.studentId },
-    { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
-    { runValidators: true, new: true }
-  )
-    .then((student) =>
-      !student
-        ? res
-          .status(404)
-          .json({ message: 'No student found with that ID :(' })
-        : res.json(student)
-    )
-    .catch((err) => res.status(500).json(err));
+// Remove friend from a user
+async removeFriend(req, res) {
+  try {
+    const userData = await User.findOneAndUpdate({ _id: req.params.userId }, { $pull: { friends: req.params.friendId } }, { new: true });
+
+    if (!userData) {
+      return res.status(404).json({ message: 'No user with that id!' });
+    }
+
+    res.json(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
 },
 };
