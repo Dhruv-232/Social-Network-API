@@ -29,4 +29,25 @@ module.exports = {
             return res.status(500).json(err);
           });
       },
+
+      createThought(req, res) {
+        Thought.create(req.body)
+          .then((thought) => {
+            User.findOneAndUpdate(
+                {_id:req.body.userId},
+                {$push: {thoughts: thought._id}},
+                {new: true}
+            )
+            .then((user) =>{
+                if(!user) {
+                    return
+                    res.status(404).json({ message: 'Thought created but no user with that id!' });
+                }
+                res.json({ message: 'Thought  created!' });
+
+          })
+          .catch((err) => res.status(500).json(err));
+          })
+          .catch((err) => res.status(500).json(err));
+      },
 };
