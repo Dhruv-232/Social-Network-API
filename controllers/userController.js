@@ -17,7 +17,9 @@ module.exports = {
   },
   // Get a single user
   getSingleUser(req, res) {
-    User.findOne({ _id: req.params.Id })
+    console.log("ID = ", req.params.id);
+    console.log("Req.params = ", req.params);
+    User.findOne({ _id: req.params.userId })
       .select('-__v')
       .populate('friends')
       .populate('thoughts')
