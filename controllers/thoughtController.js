@@ -80,6 +80,7 @@ module.exports = {
       },
         // update thought
         async updateThought(req, res) {
+          try{
             const thought = await Thought.findOneAndUpdate({ _id: req.params.thoughtId }, { $set: req.body }, { runValidators: true, new: true });
         
             if (!thought) {
@@ -87,11 +88,12 @@ module.exports = {
             }
         
             res.json(thought);
-        
+          }
+          catch(err){
             console.log(err);
             res.status(500).json(err);
-          },
-        
+          }
+        },
         // Add reaction
         async addReaction(req, res) {
             try {
