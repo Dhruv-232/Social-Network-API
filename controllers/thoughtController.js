@@ -16,13 +16,13 @@ module.exports = {
         });
     },
     getSingleThought(req, res) {
-        Thought.findOne({ _id: req.params.Id })
+        Thought.findOne({ _id: req.params.thoughtId })
           .then(async (thought) =>
             !thought
               ? res.status(404).json({ message: 'No thought with that ID' })
-              : res.json({
+              : res.json(
                 thought
-              })
+              )
           )
           .catch((err) => {
             console.log(err);
@@ -31,6 +31,7 @@ module.exports = {
       },
 
       createThought(req, res) {
+        console.log('req.body =', req.body);
         Thought.create(req.body)
           .then((thought) => {
             User.findOneAndUpdate(
